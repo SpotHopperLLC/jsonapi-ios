@@ -20,8 +20,7 @@
 
 @implementation JSONAPITests
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
     
     [JSONAPI setIsDebuggingEnabled:TRUE];
@@ -38,8 +37,7 @@
     [[JSONAPIResourceModeler defaultInstance] useResource:[PostResource class] toLinkedType:@"posts"];
 }
 
-- (void)tearDown
-{
+- (void)tearDown {
     [[JSONAPIResourceLinker defaultInstance] unlinkAll];
     [[JSONAPIResourceModeler defaultInstance] unmodelAll];
     [[JSONAPIResourceFormatter defaultInstance] unregisterAll];
@@ -47,8 +45,7 @@
     [super tearDown];
 }
 
-- (void)testLinkingCommentResource
-{
+- (void)testLinkingCommentResource {
     NSString *linkedType = [[JSONAPIResourceLinker defaultInstance] linkedType:@"comment"];
     NSLog(@"linkedType: %@", linkedType);
     Class c = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:linkedType];
@@ -58,8 +55,7 @@
     XCTAssert([@"CommentResource" isEqualToString:type], @"CommentResource is expected");
 }
 
-- (void)testLinkingPeopleResource
-{
+- (void)testLinkingPeopleResource {
     NSString *linkedType = [[JSONAPIResourceLinker defaultInstance] linkedType:@"authors"];
     NSLog(@"linkedType: %@", linkedType);
     Class c = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:linkedType];
@@ -69,8 +65,7 @@
     XCTAssert([@"PeopleResource" isEqualToString:type], @"PeopleResource is expected");
 }
 
-- (void)testLinkingPostResource
-{
+- (void)testLinkingPostResource {
     NSString *linkedType = [[JSONAPIResourceLinker defaultInstance] linkedType:@"posts"];
     NSLog(@"linkedType: %@", linkedType);
     Class c = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:linkedType];
@@ -80,8 +75,7 @@
     XCTAssert([@"PostResource" isEqualToString:type], @"PostResource is expected");
 }
 
-- (void)testMeta
-{
+- (void)testMeta {
     NSDictionary *meta = @{ @"page_number" : @1, @"number_of_pages" : @5};
     NSDictionary *linked = @{ @"authors" : @[ @{ @"id" : @9, @"name" : @"Josh" } ] };
     NSDictionary *json = @{ @"meta" : meta, @"linked" : linked, @"posts" : @[ @{ @"id" : @1, @"name" : @"Josh is awesome", @"links" : @{ @"author" : @9 } } ] };
@@ -91,8 +85,7 @@
     
 }
 
-- (void)testBadMeta
-{
+- (void)testBadMeta {
     NSArray *meta = @[ @{ @"page_number" : @1, @"number_of_pages" : @5} ];
     NSDictionary *linked = @{ @"authors" : @[ @{ @"id" : @9, @"name" : @"Josh" } ] };
     NSDictionary *json = @{ @"meta" : meta, @"linked" : linked, @"posts" : @[ @{ @"id" : @1, @"name" : @"Josh is awesome", @"links" : @{ @"author" : @9 } } ] };
@@ -102,8 +95,7 @@
     
 }
 
-- (void)testLinkedCount
-{
+- (void)testLinkedCount {
     NSDictionary *meta = @{ @"page_number" : @1, @"number_of_pages" : @5};
     NSDictionary *linked = @{ @"authors" : @[ @{ @"id" : @9, @"name" : @"Josh" } ] };
     NSDictionary *json = @{ @"meta" : meta, @"linked" : linked, @"posts" : @[ @{ @"id" : @1, @"name" : @"Josh is awesome", @"links" : @{ @"author" : @9 } } ] };
@@ -121,12 +113,11 @@
     
     JSONAPI *jsonAPI = [[JSONAPI alloc] initWithDictionary:json];
     JSONAPIResource *linkedAuthorResource = (jsonAPI.linked)[@"authors"][@9];
-    XCTAssertEqualObjects(linkedAuthor9[@"id"], linkedAuthorResource.ID , @"Author resource ID does not equal %@", linkedAuthor9[[[@"id"]]]);
-    XCTAssertEqualObjects(linkedAuthor9[@"name"], [linkedAuthorResource objectForKey:@"name"] , @"Author resource name does not equal %@", linkedAuthor9[[[@"name"]]]);
+    XCTAssertEqualObjects(linkedAuthor9[@"id"], linkedAuthorResource.ID , @"Author resource ID does not equal %@", linkedAuthor9[@"id"]);
+    XCTAssertEqualObjects(linkedAuthor9[@"name"], [linkedAuthorResource objectForKey:@"name"] , @"Author resource name does not equal %@", linkedAuthor9[@"name"]);
 }
 
-- (void)testBadLinked
-{
+- (void)testBadLinked {
     NSDictionary *meta = @{ @"page_number" : @1, @"number_of_pages" : @5};
     NSArray *linked = @[ @{ @"authors" : @[ @{ @"id" : @9, @"name" : @"Josh" } ] } ];
     NSDictionary *json = @{ @"meta" : meta, @"linked" : linked, @"posts" : @[ @{ @"id" : @1, @"name" : @"Josh is awesome", @"links" : @{ @"author" : @9 } } ] };
@@ -134,7 +125,6 @@
     JSONAPI *jsonAPI = [[JSONAPI alloc] initWithDictionary:json];
     NSLog(@"%lu HRM %d", (unsigned long)jsonAPI.linked.count, 0);
     XCTAssert(jsonAPI.linked.count == 0, @"Linked is not 0");
-    
 }
 
 - (void)testResourcesCount {
@@ -160,8 +150,8 @@
     JSONAPI *jsonAPI = [[JSONAPI alloc] initWithDictionary:json];
     JSONAPIResource *resource = [jsonAPI resourceForKey:@"posts"];
 
-    XCTAssertEqualObjects(post[@"id"], resource.ID, @"Posts ID does not equal %@", post[[[@"id"]]]);
-    XCTAssertEqualObjects(post[@"name"], [resource objectForKey:@"name"], @"Posts name does not equal %@", post[[[@"name"]]]);
+    XCTAssertEqualObjects(post[@"id"], resource.ID, @"Posts ID does not equal %@", post[@"id"]);
+    XCTAssertEqualObjects(post[@"name"], [resource objectForKey:@"name"], @"Posts name does not equal %@", post[@"name"]);
 }
 
 - (void)testResourcesObjectWithStringId {
@@ -175,8 +165,8 @@
     JSONAPI *jsonAPI = [[JSONAPI alloc] initWithDictionary:json];
     JSONAPIResource *resource = [jsonAPI resourceForKey:@"posts"];
     
-    XCTAssertEqualObjects(post[@"id"], resource.ID, @"Posts ID does not equal %@", post[[[@"id"]]]);
-    XCTAssertEqualObjects(post[@"name"], [resource objectForKey:@"name"], @"Posts name does not equal %@", post[[[@"name"]]]);
+    XCTAssertEqualObjects(post[@"id"], resource.ID, @"Posts ID does not equal %@", post[@"id"]);
+    XCTAssertEqualObjects(post[@"name"], [resource objectForKey:@"name"], @"Posts name does not equal %@", [post objectForKey:@"name"]);
 }
 
 - (void)testResourceObjectsWithArrayOfStringIds {
@@ -204,11 +194,8 @@
     }
 
     XCTAssert(linkedAuthorsResources.count == linkedAuthors.count, @"Linked author resource count is not %lu", (unsigned long)linkedAuthors.count);
-    
-    XCTAssertEqualObjects([linkedAuthorResource9 objectForKey:@"name"], linkedAuthor9[@"name"], @"Linked author's 9 name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    
-    XCTAssertEqualObjects([linkedAuthorResource11 objectForKey:@"name"], linkedAuthor11[@"name"], @"Linked author's 11 name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    
+    XCTAssertEqualObjects([linkedAuthorResource9 objectForKey:@"name"], [linkedAuthor9 objectForKey:@"name"], @"Linked author's 9 name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
+    XCTAssertEqualObjects([linkedAuthorResource11 objectForKey:@"name"], [linkedAuthor11 objectForKey:@"name"], @"Linked author's 11 name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
 }
 
 - (void)testResourceLinkSameTypeName {
@@ -227,8 +214,7 @@
     JSONAPIResource *linkedAuthor = [resource linkedResourceForKey:@"author"];
     
     XCTAssertNotNil(linkedAuthor, @"Linked author is nil");
-    XCTAssertEqualObjects([linkedAuthor objectForKey:@"name"], linkedAuthor9[@"name"], @"Linked author's name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    XCTAssertEqualObjects([linkedAuthor objectForKey:@"name"], linkedAuthor9[@"name"], @"Linked author's name is not equal to %@", linkedAuthor9[[[@"name"]]]);
+    XCTAssertEqualObjects([linkedAuthor objectForKey:@"name"], [linkedAuthor9 objectForKey:@"name"], @"Linked author's name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
 }
 
 - (void)testResourceLinksSameTypeName {
@@ -257,12 +243,10 @@
     
     XCTAssert(linkedAuthorsResources.count == linkedAuthors.count, @"Linked author resource count is not %lu", (unsigned long)linkedAuthors.count);
     
-    XCTAssertEqualObjects([linkedAuthorResource9 objectForKey:@"name"], linkedAuthor9[@"name"], @"Linked author's 9 name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    XCTAssertEqualObjects([linkedAuthorResource9 objectForKey:@"name"], linkedAuthor9[@"name"], @"Linked author's 9 name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    
-    XCTAssertEqualObjects([linkedAuthorResource11 objectForKey:@"name"], linkedAuthor11[@"name"], @"Linked author's 11 name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    XCTAssertEqualObjects([linkedAuthorResource11 objectForKey:@"name"], linkedAuthor11[@"name"], @"Linked author's 11 name is not equal to %@", linkedAuthor9[[[@"name"]]]);
-    
+    XCTAssertEqualObjects([linkedAuthorResource9 objectForKey:@"name"], [linkedAuthor9 objectForKey:@"name"], @"Linked author's 9 name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
+    XCTAssertEqualObjects([linkedAuthorResource9 objectForKey:@"name"], [linkedAuthor9 objectForKey:@"name"], @"Linked author's 9 name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
+    XCTAssertEqualObjects([linkedAuthorResource11 objectForKey:@"name"], [linkedAuthor11 objectForKey:@"name"], @"Linked author's 11 name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
+    XCTAssertEqualObjects([linkedAuthorResource11 objectForKey:@"name"], [linkedAuthor11 objectForKey:@"name"], @"Linked author's 11 name is not equal to %@", [linkedAuthor9 objectForKey:@"name"]);
 }
 
 - (void)testResourceLinksRealDifferentTypeName {
@@ -282,10 +266,8 @@
     JSONAPIResource *linkedPersonResource = [resource linkedResourceForKey:@"person"];
     
     XCTAssertNotNil(linkedPersonResource, @"Linked person is nil");
-    XCTAssertEqualObjects([linkedPersonResource objectForKey:@"name"], linkedPeople9[@"name"], @"Linked person's 9 name is not equal to %@", linkedPeople11[[[@"name"]]]);
-    XCTAssertEqualObjects([linkedPersonResource objectForKey:@"name"], linkedPeople9[@"name"], @"Linked person's 9 name is not equal to %@", linkedPeople11[[[@"name"]]]);
-
-    
+    XCTAssertEqualObjects([linkedPersonResource objectForKey:@"name"], [linkedPeople9 objectForKey:@"name"], @"Linked person's 9 name is not equal to %@", [linkedPeople11 objectForKey:@"name"]);
+    XCTAssertEqualObjects([linkedPersonResource objectForKey:@"name"], [linkedPeople9 objectForKey:@"name"], @"Linked person's 9 name is not equal to %@", [linkedPeople11 objectForKey:@"name"]);
 }
 
 - (void)testResourceModels {
@@ -303,8 +285,8 @@
     
     XCTAssert([postResource class] == [PostResource class], @"Post resource is not of type PostResource, but %@", [postResource class]);
     XCTAssert([postResource.author class] == [PeopleResource class], @"Post resource's author is not of type PeopleResource, but %@", [postResource.author class]);
-    XCTAssertEqualObjects(postResource.name, post[@"name"], @"Post name is not equal to %@", post[[[@"name"]]]);
-    XCTAssertEqualObjects(postResource.author.name, linkedAuthor9[@"name"], @"Author name is not equal to %@", post[[[@"name"]]]);
+    XCTAssertEqualObjects(postResource.name, [post objectForKey:@"name"], @"Post name is not equal to %@", [post objectForKey:@"name"]);
+    XCTAssertEqualObjects(postResource.author.name, [linkedAuthor9 objectForKey:@"name"], @"Author name is not equal to %@", [post objectForKey:@"name"]);
 }
 
 - (void)testLinksInLinked {
@@ -324,9 +306,9 @@
     JSONAPIResource *bookResource = [chapterResource linkedResourceForKey:@"book"];
     JSONAPIResource *authorResource = [bookResource linkedResourceForKey:@"author"];
     
-    XCTAssertEqualObjects([chapterResource objectForKey:@"name"], chapter[@"name"], @"Chapter name should equal %@", chapter[[[@"name"]]]);
-    XCTAssertEqualObjects([bookResource objectForKey:@"name"], linkedBook9[@"name"], @"Book name should equal %@", chapter[[[@"name"]]]);
-    XCTAssertEqualObjects([authorResource objectForKey:@"name"], linkedAuthor11[@"name"], @"Author name should equal %@", chapter[[[@"name"]]]);
+    XCTAssertEqualObjects([chapterResource objectForKey:@"name"], [chapter objectForKey:@"name"], @"Chapter name should equal %@", [chapter objectForKey:@"name"]);
+    XCTAssertEqualObjects([bookResource objectForKey:@"name"], [linkedBook9 objectForKey:@"name"], @"Book name should equal %@", [chapter objectForKey:@"name"]);
+    XCTAssertEqualObjects([authorResource objectForKey:@"name"], [linkedAuthor11 objectForKey:@"name"], @"Author name should equal %@", [chapter objectForKey:@"name"]);
 }
 
 - (void)testMapKeysToProperties {
@@ -344,8 +326,8 @@
     
     XCTAssert([postResource class] == [PostResource class], @"Post resource is not of type PostResource, but %@", [postResource class]);
     XCTAssert([postResource.author class] == [PeopleResource class], @"Post resource's author is not of type PeopleResource, but %@", [postResource.author class]);
-    XCTAssertEqualObjects(postResource.name, post[@"name"], @"Post name is not equal to %@", post[[[@"name"]]]);
-    XCTAssertEqualObjects(postResource.author.name, linkedAuthor9[@"name"], @"Author name is not equal to %@", post[[[@"name"]]]);
+    XCTAssertEqualObjects(postResource.name, [post objectForKey:@"name"], @"Post name is not equal to %@", [post objectForKey:@"name"]);
+    XCTAssertEqualObjects(postResource.author.name, [linkedAuthor9 objectForKey:@"name"], @"Author name is not equal to %@", [post objectForKey:@"name"]);
 }
 
 - (void)testCopying {

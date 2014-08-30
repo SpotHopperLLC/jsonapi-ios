@@ -10,7 +10,21 @@
 
 #import "JSONAPI.h"
 
+
+#pragma mark - Class Extension
+#pragma mark -
+
+@interface JSONAPIResourceModeler ()
+
+@property (nonatomic, strong, readwrite) NSMutableDictionary *resourceToLinkedType;
+
+@end
+
 @implementation JSONAPIResourceModeler
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"[%@] %@", NSStringFromClass([self class]), self.resourceToLinkedType];
+}
 
 + (instancetype)defaultInstance {
     static JSONAPIResourceModeler *_defaultInstance = nil;

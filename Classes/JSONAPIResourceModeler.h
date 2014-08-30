@@ -10,7 +10,7 @@
 
 @interface JSONAPIResourceModeler : NSObject
 
-@property (nonatomic, strong) NSMutableDictionary *resourceToLinkedType;
+@property (nonatomic, readonly) NSMutableDictionary *resourceToLinkedType;
 
 + (instancetype)defaultInstance;
 

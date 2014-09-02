@@ -10,8 +10,9 @@
 
 @implementation JSONAPIResourceLinker
 
+static JSONAPIResourceLinker *_defaultInstance = nil;
+
 + (instancetype)defaultInstance {
-    static JSONAPIResourceLinker *_defaultInstance = nil;
     if (!_defaultInstance) {
         _defaultInstance = [[JSONAPIResourceLinker alloc] init];
     }
@@ -27,16 +28,8 @@
     return self;
 }
 
-+ (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType {
-    [[JSONAPIResourceLinker defaultInstance] link:resourceLinkType toLinkedType:linkedType];
-}
-
-+ (NSString*)linkedType:(NSString*)resourceLinkType {
-    return [[JSONAPIResourceLinker defaultInstance] linkedType:resourceLinkType];
-}
-
-+ (void)unlinkAll {
-    [[JSONAPIResourceLinker defaultInstance] unlinkAll];
+- (NSString *)description {
+    return [NSString stringWithFormat:@"(%@) : %@", NSStringFromClass([self class]), self.linkedTypeToLinksType.allKeys];
 }
 
 - (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType {
@@ -54,6 +47,21 @@
 
 - (void)unlinkAll {
     [self.linkedTypeToLinksType removeAllObjects];
+}
+
+#pragma mark - Deprecated
+#pragma mark -
+
++ (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType {
+    [[JSONAPIResourceLinker defaultInstance] link:resourceLinkType toLinkedType:linkedType];
+}
+
++ (NSString*)linkedType:(NSString*)resourceLinkType {
+    return [[JSONAPIResourceLinker defaultInstance] linkedType:resourceLinkType];
+}
+
++ (void)unlinkAll {
+    [[JSONAPIResourceLinker defaultInstance] unlinkAll];
 }
 
 @end

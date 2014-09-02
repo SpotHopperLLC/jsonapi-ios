@@ -22,14 +22,11 @@
 
 @implementation JSONAPIResourceModeler
 
-- (NSString *)description {
-    return [NSString stringWithFormat:@"[%@] %@", NSStringFromClass([self class]), self.resourceToLinkedType];
-}
+static JSONAPIResourceModeler *_defaultInstance = nil;
 
 + (instancetype)defaultInstance {
-    static JSONAPIResourceModeler *_defaultInstance = nil;
     if (!_defaultInstance) {
-         _defaultInstance = [[JSONAPIResourceModeler alloc] init];
+        _defaultInstance = [[JSONAPIResourceModeler alloc] init];
     }
     
     return _defaultInstance;
@@ -43,16 +40,8 @@
     return self;
 }
 
-+ (void)useResource:(Class)jsonApiResource toLinkedType:(NSString *)linkedType {
-    [[JSONAPIResourceModeler defaultInstance].resourceToLinkedType setValue:jsonApiResource forKey:linkedType];
-}
-
-+ (Class)resourceForLinkedType:(NSString *)linkedType {
-    return [[JSONAPIResourceModeler defaultInstance].resourceToLinkedType valueForKey:linkedType];
-}
-
-+ (void)unmodelAll {
-    [[JSONAPIResourceModeler defaultInstance].resourceToLinkedType removeAllObjects];
+- (NSString *)description {
+    return [NSString stringWithFormat:@"(%@) : %@", NSStringFromClass([self class]), self.resourceToLinkedType];
 }
 
 - (void)useResource:(Class)jsonApiResource toLinkedType:(NSString *)linkedType {
@@ -60,7 +49,7 @@
 }
 
 - (Class)resourceForLinkedType:(NSString *)linkedType {
-    Class c = [self.resourceToLinkedType valueForKey:linkedType];
+    Class c = self.resourceToLinkedType[linkedType];
 
 #ifndef NDEBUG
     if ([JSONAPI isDebuggingEnabled]) {
@@ -73,6 +62,21 @@
 
 - (void)unmodelAll {
     [self.resourceToLinkedType removeAllObjects];
+}
+
+#pragma mark - Deprecated
+#pragma mark -
+
++ (void)useResource:(Class)jsonApiResource toLinkedType:(NSString *)linkedType {
+    [[JSONAPIResourceModeler defaultInstance] useResource:jsonApiResource toLinkedType:linkedType];
+}
+
++ (Class)resourceForLinkedType:(NSString *)linkedType {
+    return [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:linkedType];
+}
+
++ (void)unmodelAll {
+    [[JSONAPIResourceModeler defaultInstance] unmodelAll];
 }
 
 @end

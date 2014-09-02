@@ -18,12 +18,9 @@
 
 @implementation JSONAPIResourceFormatter
 
-- (NSString *)description {
-    return [NSString stringWithFormat:@"Format Blocks: %@", self.formatBlocks.allKeys];
-}
+static JSONAPIResourceFormatter *_defaultInstance = nil;
 
 + (instancetype)defaultInstance {
-    static JSONAPIResourceFormatter *_defaultInstance = nil;
     if (!_defaultInstance) {
         _defaultInstance = [[JSONAPIResourceFormatter alloc] init];
     }
@@ -39,12 +36,8 @@
     return self;
 }
 
-+ (void)registerFormat:(NSString*)name withBlock:(id(^)(id jsonValue))block {
-    [[JSONAPIResourceFormatter defaultInstance] registerFormat:name withBlock:block];
-}
-
-+ (id)performFormatBlock:(NSString*)value withName:(NSString*)name {
-    return [[JSONAPIResourceFormatter defaultInstance] performFormatBlock:value withName:name];
+- (NSString *)description {
+    return [NSString stringWithFormat:@"(%@) : %@", NSStringFromClass([self class]), self.formatBlocks.allKeys];
 }
 
 - (void)registerFormat:(NSString*)name withBlock:(id(^)(id jsonValue))block {
@@ -74,6 +67,17 @@
 
 - (void)unregisterAll {
     [self.formatBlocks removeAllObjects];
+}
+
+#pragma mark - Deprecated
+#pragma mark -
+
++ (void)registerFormat:(NSString*)name withBlock:(id(^)(id jsonValue))block {
+    [[JSONAPIResourceFormatter defaultInstance] registerFormat:name withBlock:block];
+}
+
++ (id)performFormatBlock:(NSString*)value withName:(NSString*)name {
+    return [[JSONAPIResourceFormatter defaultInstance] performFormatBlock:value withName:name];
 }
 
 @end

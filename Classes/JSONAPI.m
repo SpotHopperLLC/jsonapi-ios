@@ -12,6 +12,9 @@
 
 @property (nonatomic, strong, readwrite) NSDictionary *dictionary;
 
+@property (nonatomic, strong) JSONAPIResourceLinker *linker;
+@property (nonatomic, strong) JSONAPIResourceModeler *modeler;
+
 @end
 
 @implementation JSONAPI
@@ -28,6 +31,12 @@ static BOOL _isDebuggingEnabled;
     return _isDebuggingEnabled;
 }
 
++ (void)warnOfMappingFailure:(NSString *)failureMessage {
+    if ([JSONAPI isDebuggingEnabled]) {
+        NSLog(@"Warning: %@", failureMessage);
+    }
+}
+
 #pragma mark - Init
 
 + (id)JSONAPIWithString:(NSString*)string {
@@ -41,6 +50,8 @@ static BOOL _isDebuggingEnabled;
 - (id)initWithString:(NSString*)string {
     self = [super init];
     if (self) {
+        self.linker = [JSONAPIResourceLinker defaultInstance];
+        self.modeler = [JSONAPIResourceModeler defaultInstance];
         [self inflateWithString:string];
     }
     return self;
@@ -49,6 +60,8 @@ static BOOL _isDebuggingEnabled;
 - (id)initWithDictionary:(NSDictionary*)dictionary {
     self = [super init];
     if (self) {
+        self.linker = [JSONAPIResourceLinker defaultInstance];
+        self.modeler = [JSONAPIResourceModeler defaultInstance];
         [self inflateWithDictionary:dictionary];
     }
     return self;
@@ -89,7 +102,7 @@ static BOOL _isDebuggingEnabled;
     NSArray *rawResources = _dictionary[key];
     NSArray *resources = nil;
     if ([rawResources isKindOfClass:[NSArray class]] == YES) {
-        Class c = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:[[JSONAPIResourceLinker defaultInstance] linkedType:key]];
+        Class c = [self.modeler resourceForLinkedType:[self.linker linkedType:key]];
         resources = [JSONAPIResource jsonAPIResources:rawResources withLinked:self.linked withClass:c];
     }
     
@@ -122,7 +135,7 @@ static BOOL _isDebuggingEnabled;
             if ([value isKindOfClass:[NSArray class]] == YES) {
                 NSMutableDictionary *resources = @{}.mutableCopy;
                 for (NSDictionary *resourceDictionary in value) {
-                    Class c = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:[[JSONAPIResourceLinker defaultInstance] linkedType:key]];
+                    Class c = [self.modeler resourceForLinkedType:[self.linker linkedType:key]];
                     JSONAPIResource *resource = [JSONAPIResource jsonAPIResource:resourceDictionary withLinked:nil withClass:c];
                     if (resource.ID != nil) {
                         resources[resource.ID] = resource;

@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JSONAPIResourceFormatter.h"
+#import "JSONAPIResourceLinker.h"
+
 @interface JSONAPIResource : NSObject<NSCopying, NSCoding>
 
 @property (nonatomic, strong) id ID;

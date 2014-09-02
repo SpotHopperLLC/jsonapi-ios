@@ -52,9 +52,8 @@ static JSONAPIResourceFormatter *_defaultInstance = nil;
     }
     else {
 #ifndef NDEBUG
-        if ([JSONAPI isDebuggingEnabled]) {
-            NSLog(@"Warning: Formatting block was not defined for '%@' (%@)", name, NSStringFromSelector(_cmd));
-        }
+        [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Formatting block was not defined for '%@' (%@)",
+                                       name, NSStringFromSelector(_cmd)]];
 #endif
         return nil;
     }
@@ -73,11 +72,11 @@ static JSONAPIResourceFormatter *_defaultInstance = nil;
 #pragma mark -
 
 + (void)registerFormat:(NSString*)name withBlock:(id(^)(id jsonValue))block {
-    [[JSONAPIResourceFormatter defaultInstance] registerFormat:name withBlock:block];
+    [[self defaultInstance] registerFormat:name withBlock:block];
 }
 
 + (id)performFormatBlock:(NSString*)value withName:(NSString*)name {
-    return [[JSONAPIResourceFormatter defaultInstance] performFormatBlock:value withName:name];
+    return [[self defaultInstance] performFormatBlock:value withName:name];
 }
 
 @end

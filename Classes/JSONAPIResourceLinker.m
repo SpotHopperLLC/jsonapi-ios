@@ -53,15 +53,15 @@ static JSONAPIResourceLinker *_defaultInstance = nil;
 #pragma mark -
 
 + (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType {
-    [[JSONAPIResourceLinker defaultInstance] link:resourceLinkType toLinkedType:linkedType];
+    [[self defaultInstance] link:resourceLinkType toLinkedType:linkedType];
 }
 
 + (NSString*)linkedType:(NSString*)resourceLinkType {
-    return [[JSONAPIResourceLinker defaultInstance] linkedType:resourceLinkType];
+    return [[self defaultInstance] linkedType:resourceLinkType];
 }
 
 + (void)unlinkAll {
-    [[JSONAPIResourceLinker defaultInstance] unlinkAll];
+    [[self defaultInstance] unlinkAll];
 }
 
 @end

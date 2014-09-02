@@ -9,8 +9,6 @@
 #import "JSONAPIResource.h"
 
 #import "JSONAPI.h"
-#import "JSONAPIResourceFormatter.h"
-#import "JSONAPIResourceLinker.h"
 
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -21,6 +19,9 @@
 
 @property (nonatomic, strong) NSDictionary *__dictionary;
 @property (nonatomic, strong) NSMutableDictionary *__resourceLinks;
+
+@property (nonatomic, strong) JSONAPIResourceFormatter *formatter;
+@property (nonatomic, strong) JSONAPIResourceLinker *linker;
 
 @end
 
@@ -35,9 +36,8 @@
 
 + (NSArray*)jsonAPIResources:(NSArray*)array withLinked:(NSDictionary*)linked withClass:(Class)resourceObjectClass {
 #ifndef NDEBUG
-    if ([JSONAPI isDebuggingEnabled]) {
-        NSLog(@"Warning: Class not defined for linked resources: %@ (%@)", array, NSStringFromSelector(_cmd));
-    }
+    [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Class not defined for linked resources: %@ (%@)",
+                                   array, NSStringFromSelector(_cmd)]];
 #endif
     if (resourceObjectClass == nil) {
         resourceObjectClass = [self class];
@@ -70,6 +70,9 @@
     self = [super init];
     if (self) {
         self.__resourceLinks = @{}.mutableCopy;
+        
+        self.formatter = [JSONAPIResourceFormatter defaultInstance];
+        self.linker = [JSONAPIResourceLinker defaultInstance];
     }
     return self;
 }
@@ -126,7 +129,7 @@
                     NSString *formatFunction = [property substringToIndex:formatRange.location];
                     property = [property substringFromIndex:(formatRange.location+1)];
                     
-                    [self setValue:[[JSONAPIResourceFormatter defaultInstance] performFormatBlock:dict[key] withName:formatFunction] forKey:property ];
+                    [self setValue:[self.formatter performFormatBlock:dict[key] withName:formatFunction] forKey:property ];
                 } else {
                     [self setValue:dict[key] forKey:property ];
                 }
@@ -146,7 +149,7 @@
     // Loops through links of resources
     for (NSString *linkTypeUnmapped in self.links.allKeys) {
         
-        NSString *linkType = [[JSONAPIResourceLinker defaultInstance] linkedType:linkTypeUnmapped];
+        NSString *linkType = [self.linker linkedType:linkTypeUnmapped];
         if (linkType == nil) {
             linkType = linkTypeUnmapped;
         }

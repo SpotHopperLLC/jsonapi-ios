@@ -25,16 +25,19 @@
     
     [JSONAPI setIsDebuggingEnabled:TRUE];
 
-    [[JSONAPIResourceLinker defaultInstance] link:@"author" toLinkedType:@"authors"];
-    [[JSONAPIResourceLinker defaultInstance] link:@"authors" toLinkedType:@"authors"]; // Don't NEED this but why not be explicit
-    [[JSONAPIResourceLinker defaultInstance] link:@"person" toLinkedType:@"people"];
-    [[JSONAPIResourceLinker defaultInstance] link:@"chapter" toLinkedType:@"chapters"];
-    [[JSONAPIResourceLinker defaultInstance] link:@"book" toLinkedType:@"books"];
+    JSONAPIResourceLinker *linker = [JSONAPIResourceLinker defaultInstance];
+    JSONAPIResourceModeler *modeler = [JSONAPIResourceModeler defaultInstance];
     
-    [[JSONAPIResourceModeler defaultInstance] useResource:[CommentResource class] toLinkedType:@"comment"];
-    [[JSONAPIResourceModeler defaultInstance] useResource:[PeopleResource class] toLinkedType:@"authors"];
-    [[JSONAPIResourceModeler defaultInstance] useResource:[PeopleResource class] toLinkedType:@"people"];
-    [[JSONAPIResourceModeler defaultInstance] useResource:[PostResource class] toLinkedType:@"posts"];
+    [linker link:@"author" toLinkedType:@"authors"];
+    [linker link:@"authors" toLinkedType:@"authors"]; // Don't NEED this but why not be explicit
+    [linker link:@"person" toLinkedType:@"people"];
+    [linker link:@"chapter" toLinkedType:@"chapters"];
+    [linker link:@"book" toLinkedType:@"books"];
+    
+    [modeler useResource:[CommentResource class] toLinkedType:@"comment"];
+    [modeler useResource:[PeopleResource class] toLinkedType:@"authors"];
+    [modeler useResource:[PeopleResource class] toLinkedType:@"people"];
+    [modeler useResource:[PostResource class] toLinkedType:@"posts"];
 }
 
 - (void)tearDown {

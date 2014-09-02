@@ -23,6 +23,7 @@
 
 + (void)setIsDebuggingEnabled:(BOOL)enabled;
 + (BOOL)isDebuggingEnabled;
++ (void)warnOfMappingFailure:(NSString *)failureMessage;
 
 + (id)JSONAPIWithString:(NSString*)string;
 + (id)JSONAPIWithDictionary:(NSDictionary*)dictionary;

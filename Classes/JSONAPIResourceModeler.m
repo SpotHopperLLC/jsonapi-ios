@@ -52,9 +52,8 @@ static JSONAPIResourceModeler *_defaultInstance = nil;
     Class c = self.resourceToLinkedType[linkedType];
 
 #ifndef NDEBUG
-    if ([JSONAPI isDebuggingEnabled]) {
-        NSLog(@"Warning: Class not defined for '%@' (%@)", linkedType, NSStringFromSelector(_cmd));
-    }
+    [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Class not defined for '%@' (%@)",
+                                   linkedType, NSStringFromSelector(_cmd)]];
 #endif
     
     return c;
@@ -68,15 +67,15 @@ static JSONAPIResourceModeler *_defaultInstance = nil;
 #pragma mark -
 
 + (void)useResource:(Class)jsonApiResource toLinkedType:(NSString *)linkedType {
-    [[JSONAPIResourceModeler defaultInstance] useResource:jsonApiResource toLinkedType:linkedType];
+    [[self defaultInstance] useResource:jsonApiResource toLinkedType:linkedType];
 }
 
 + (Class)resourceForLinkedType:(NSString *)linkedType {
-    return [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:linkedType];
+    return [[self defaultInstance] resourceForLinkedType:linkedType];
 }
 
 + (void)unmodelAll {
-    [[JSONAPIResourceModeler defaultInstance] unmodelAll];
+    [[self defaultInstance] unmodelAll];
 }
 
 @end

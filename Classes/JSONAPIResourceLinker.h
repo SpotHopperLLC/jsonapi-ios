@@ -14,14 +14,14 @@
 
 + (instancetype)defaultInstance;
 
-+ (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType __deprecated;
-+ (NSString*)linkedType:(NSString*)resourceLinkType __deprecated;
-
-+ (void)unlinkAll __deprecated;
-
 - (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType;
 - (NSString*)linkedType:(NSString*)resourceLinkType;
-
 - (void)unlinkAll;
+
+#pragma mark - Deprecated
+
++ (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType __deprecated;
++ (NSString*)linkedType:(NSString*)resourceLinkType __deprecated;
++ (void)unlinkAll __deprecated;
 
 @end

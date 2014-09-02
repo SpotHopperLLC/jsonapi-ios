@@ -20,8 +20,8 @@
 @property (nonatomic, strong) NSDictionary *__dictionary;
 @property (nonatomic, strong) NSMutableDictionary *__resourceLinks;
 
-@property (nonatomic, strong) JSONAPIResourceFormatter *formatter;
-@property (nonatomic, strong) JSONAPIResourceLinker *linker;
+@property (nonatomic, strong) JSONAPIResourceFormatter *__formatter;
+@property (nonatomic, strong) JSONAPIResourceLinker *__linker;
 
 @end
 
@@ -73,8 +73,8 @@
     if (self) {
         self.__resourceLinks = @{}.mutableCopy;
         
-        self.formatter = [JSONAPIResourceFormatter defaultInstance];
-        self.linker = [JSONAPIResourceLinker defaultInstance];
+        self.__formatter = [JSONAPIResourceFormatter defaultInstance];
+        self.__linker = [JSONAPIResourceLinker defaultInstance];
     }
     return self;
 }
@@ -131,7 +131,7 @@
                     NSString *formatFunction = [property substringToIndex:formatRange.location];
                     property = [property substringFromIndex:(formatRange.location+1)];
                     
-                    [self setValue:[self.formatter performFormatBlock:dict[key] withName:formatFunction] forKey:property ];
+                    [self setValue:[self.__formatter performFormatBlock:dict[key] withName:formatFunction] forKey:property ];
                 } else {
                     [self setValue:dict[key] forKey:property ];
                 }
@@ -139,11 +139,7 @@
             @catch (NSException *exception) {
                 NSLog(@"JSONAPIResource Warning - %@", [exception description]);
             }
-            
-        } else {
-            
         }
-        
     }
 }
 
@@ -151,7 +147,7 @@
     // Loops through links of resources
     for (NSString *linkTypeUnmapped in self.links.allKeys) {
         
-        NSString *linkType = [self.linker linkedType:linkTypeUnmapped];
+        NSString *linkType = [self.__linker linkedType:linkTypeUnmapped];
         if (linkType == nil) {
             linkType = linkTypeUnmapped;
         }

@@ -31,6 +31,7 @@
 		03A055F71868E08A004807F0 /* JSONAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A055F41868E08A004807F0 /* JSONAPI.m */; };
 		03A055F81868E08A004807F0 /* JSONAPI.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 03A055F51868E08A004807F0 /* JSONAPI.podspec */; };
 		03A9ED58196DEF9B00E61E2E /* JSONAPIResourceFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A9ED57196DEF9B00E61E2E /* JSONAPIResourceFormatter.m */; };
+		26DEBFC919B62A240071FA88 /* ModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DEBFC819B62A240071FA88 /* ModelManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,8 @@
 		03A055F51868E08A004807F0 /* JSONAPI.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = JSONAPI.podspec; path = ../JSONAPI.podspec; sourceTree = "<group>"; };
 		03A9ED56196DEF9B00E61E2E /* JSONAPIResourceFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONAPIResourceFormatter.h; sourceTree = "<group>"; };
 		03A9ED57196DEF9B00E61E2E /* JSONAPIResourceFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONAPIResourceFormatter.m; sourceTree = "<group>"; };
+		26DEBFC719B62A240071FA88 /* ModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelManager.h; sourceTree = "<group>"; };
+		26DEBFC819B62A240071FA88 /* ModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +164,8 @@
 				03A055CC1868E038004807F0 /* Main.storyboard */,
 				03A055CF1868E038004807F0 /* ViewController.h */,
 				03A055D01868E038004807F0 /* ViewController.m */,
+				26DEBFC719B62A240071FA88 /* ModelManager.h */,
+				26DEBFC819B62A240071FA88 /* ModelManager.m */,
 				0386643E186A791D00985CEC /* ResourceModels */,
 				03A055D21868E038004807F0 /* Images.xcassets */,
 				03A055C11868E038004807F0 /* Supporting Files */,
@@ -317,6 +322,7 @@
 				03866451186A909200985CEC /* PeopleResource.m in Sources */,
 				03866457186A94C200985CEC /* PostResource.m in Sources */,
 				03A055D11868E038004807F0 /* ViewController.m in Sources */,
+				26DEBFC919B62A240071FA88 /* ModelManager.m in Sources */,
 				0386643D186A0DAD00985CEC /* JSONAPIResourceLinker.m in Sources */,
 				03A055F71868E08A004807F0 /* JSONAPI.m in Sources */,
 				033A6C5F18695CD2001CF9FA /* JSONAPIResource.m in Sources */,

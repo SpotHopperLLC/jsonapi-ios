@@ -41,7 +41,7 @@ static JSONAPIResourceModeler *_defaultInstance = nil;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"(%@) : %@", NSStringFromClass([self class]), self.resourceToLinkedType];
+    return [NSString stringWithFormat:@"(%@, %lu) : %@", NSStringFromClass([self class]), (unsigned long)self.resourceToLinkedType.allKeys.count, self.resourceToLinkedType];
 }
 
 - (void)useResource:(Class)jsonApiResource toLinkedType:(NSString *)linkedType {

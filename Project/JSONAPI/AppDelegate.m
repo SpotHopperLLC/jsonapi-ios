@@ -8,10 +8,15 @@
 
 #import "AppDelegate.h"
 
+#import "ModelManager.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [ModelManager prepareResources];
+    
     return YES;
 }
 

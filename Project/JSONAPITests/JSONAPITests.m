@@ -10,6 +10,8 @@
 
 #import "JSONAPI.h"
 
+#import "ModelManager.h"
+
 #import "CommentResource.h"
 #import "PeopleResource.h"
 #import "PostResource.h"
@@ -24,28 +26,43 @@
     [super setUp];
     
     [JSONAPI setIsDebuggingEnabled:TRUE];
-
-    JSONAPIResourceLinker *linker = [JSONAPIResourceLinker defaultInstance];
-    JSONAPIResourceModeler *modeler = [JSONAPIResourceModeler defaultInstance];
-    
-    [linker link:@"author" toLinkedType:@"authors"];
-    [linker link:@"authors" toLinkedType:@"authors"]; // Don't NEED this but why not be explicit
-    [linker link:@"person" toLinkedType:@"people"];
-    [linker link:@"chapter" toLinkedType:@"chapters"];
-    [linker link:@"book" toLinkedType:@"books"];
-    
-    [modeler useResource:[CommentResource class] toLinkedType:@"comment"];
-    [modeler useResource:[PeopleResource class] toLinkedType:@"authors"];
-    [modeler useResource:[PeopleResource class] toLinkedType:@"people"];
-    [modeler useResource:[PostResource class] toLinkedType:@"posts"];
+    [ModelManager prepareResources];
 }
 
 - (void)tearDown {
-    [[JSONAPIResourceLinker defaultInstance] unlinkAll];
-    [[JSONAPIResourceModeler defaultInstance] unmodelAll];
-    [[JSONAPIResourceFormatter defaultInstance] unregisterAll];
+    [super tearDown];
+    
+    [ModelManager resetResources];
     
     [super tearDown];
+}
+
+- (void)testModelingCore {
+    NSLog(@"Linker: %@", [JSONAPIResourceLinker defaultInstance]);
+    NSLog(@"Modeler: %@", [JSONAPIResourceModeler defaultInstance]);
+    
+    NSString *authorsType = [[JSONAPIResourceLinker defaultInstance] linkedType:@"authors"];
+    Class authorsClass = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:authorsType];
+    NSLog(@"Authors Class: %@", NSStringFromClass(authorsClass));
+    
+    NSString *peopleType = [[JSONAPIResourceLinker defaultInstance] linkedType:@"people"];
+    Class peopleClass = [[JSONAPIResourceModeler defaultInstance] resourceForLinkedType:peopleType];
+    NSLog(@"People Class: %@", NSStringFromClass(peopleClass));
+    
+    NSLog(@"Linker: %@", [JSONAPIResourceLinker defaultInstance]);
+    NSLog(@"Modeler: %@", [JSONAPIResourceModeler defaultInstance]);
+    
+    JSONAPIResourceLinker *linker = [JSONAPIResourceLinker defaultInstance];
+    JSONAPIResourceModeler *modeler = [JSONAPIResourceModeler defaultInstance];
+    
+    XCTAssertEqual(linker, [JSONAPIResourceLinker defaultInstance], @"Linker must equal default instance");
+    XCTAssertEqual(modeler, [JSONAPIResourceModeler defaultInstance], @"Modeler must equal default instance");
+    
+    XCTAssert(linker == [JSONAPIResourceLinker defaultInstance], @"Linker must equal default instance");
+    XCTAssert(modeler == [JSONAPIResourceModeler defaultInstance], @"Modeler must equal default instance");
+    
+    XCTAssertNotNil(authorsClass, @"Authors class must be defined");
+    XCTAssertNotNil(peopleClass, @"People class must be defined");
 }
 
 - (void)testLinkingCommentResource {

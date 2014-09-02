@@ -8,6 +8,15 @@
 
 #import "JSONAPIResourceLinker.h"
 
+#pragma mark - Class Extension
+#pragma mark -
+
+@interface JSONAPIResourceLinker ()
+
+@property (nonatomic, strong) NSMutableDictionary *linkedTypeToLinksType;
+
+@end
+
 @implementation JSONAPIResourceLinker
 
 static JSONAPIResourceLinker *_defaultInstance = nil;
@@ -29,7 +38,7 @@ static JSONAPIResourceLinker *_defaultInstance = nil;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"(%@) : %@", NSStringFromClass([self class]), self.linkedTypeToLinksType.allKeys];
+    return [NSString stringWithFormat:@"(%@, %lu) : %@", NSStringFromClass([self class]), (unsigned long)self.linkedTypeToLinksType.allKeys.count, self.linkedTypeToLinksType.allKeys];
 }
 
 - (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType {

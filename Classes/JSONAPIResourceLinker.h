@@ -10,8 +10,6 @@
 
 @interface JSONAPIResourceLinker : NSObject
 
-@property (nonatomic, strong) NSMutableDictionary *linkedTypeToLinksType;
-
 + (instancetype)defaultInstance;
 
 - (void)link:(NSString*)resourceLinkType toLinkedType:(NSString*)linkedType;

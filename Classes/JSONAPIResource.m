@@ -36,8 +36,10 @@
 
 + (NSArray*)jsonAPIResources:(NSArray*)array withLinked:(NSDictionary*)linked withClass:(Class)resourceObjectClass {
 #ifndef NDEBUG
-    [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Class not defined for linked resources: %@ (%@)",
-                                   array, NSStringFromSelector(_cmd)]];
+    if (!resourceObjectClass) {
+        [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Class not defined for linked resources: %@ (%@)",
+                                       array, NSStringFromSelector(_cmd)]];
+    }
 #endif
     if (resourceObjectClass == nil) {
         resourceObjectClass = [self class];

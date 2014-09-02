@@ -49,14 +49,16 @@ static JSONAPIResourceModeler *_defaultInstance = nil;
 }
 
 - (Class)resourceForLinkedType:(NSString *)linkedType {
-    Class c = self.resourceToLinkedType[linkedType];
+    Class class = self.resourceToLinkedType[linkedType];
 
 #ifndef NDEBUG
-    [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Class not defined for '%@' (%@)",
-                                   linkedType, NSStringFromSelector(_cmd)]];
+    if (!class) {
+        [JSONAPI warnOfMappingFailure:[NSString stringWithFormat:@"Class not defined for '%@' (%@)",
+                                       linkedType, NSStringFromSelector(_cmd)]];
+    }
 #endif
     
-    return c;
+    return class;
 }
 
 - (void)unmodelAll {

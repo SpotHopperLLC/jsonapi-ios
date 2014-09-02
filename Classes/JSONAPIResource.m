@@ -292,7 +292,9 @@
     for (NSString *key in [self propertyKeys])
     {
         id value = [self valueForKey:key];
-        [aCoder encodeObject:value forKey:key];
+        if ([value conformsToProtocol:@protocol(NSCoding)]) {
+            [aCoder encodeObject:value forKey:key];
+        }
     }
 }
 

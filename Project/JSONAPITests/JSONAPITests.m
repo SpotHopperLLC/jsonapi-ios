@@ -65,6 +65,21 @@
     XCTAssertNotNil(peopleClass, @"People class must be defined");
 }
 
+- (void)testEncoder {
+    PeopleResource *person = [[PeopleResource alloc] init];
+    
+    @try {
+        NSMutableData *data = [NSMutableData data];
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+        [person encodeWithCoder:archiver];
+        [archiver finishEncoding];
+        XCTAssert(TRUE, @"Resource fully conforms to NCoding protocol");
+    }
+    @catch (NSException *exception) {
+        XCTAssert(FALSE, @"Resource must fully conform to NCoding protocol");
+    }
+}
+
 - (void)testLinkingCommentResource {
     NSString *linkedType = [[JSONAPIResourceLinker defaultInstance] linkedType:@"comment"];
     NSLog(@"linkedType: %@", linkedType);
